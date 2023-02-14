@@ -8,8 +8,8 @@ resource "aws_security_group" "my_security_group" {
   description = "security group for Ec2 instance"
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
