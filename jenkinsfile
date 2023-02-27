@@ -1,0 +1,79 @@
+pipeline {
+    
+       parameters {
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+    } 
+    agent any
+
+       
+    stages {
+        stage('checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/pawaranurag123/basic_tf_code.git']])
+            }
+        }
+        stage ("terraform init") {
+            steps {
+                sh ('terraform init') 
+            }
+        }
+        stage('Approval') {
+           when {
+               not {
+                   equals expected: true, actual: params.autoApprove
+               }
+           }
+
+           steps {
+               script {
+                    input message: "Do you want to apply the plan?"
+                    
+               }
+           }
+       }
+       
+        stage ("terraform Action") {
+            steps {
+                echo "Terraform action is --> ${action}"
+                sh ('terraform ${action} --auto-approve');
+           }
+        }
+        
+   }  
+   
+   post{
+       success{
+           notifySuccessfull()
+       }
+       failure{
+           notifyFailed()
+       }
+   }
+    
+}
+
+    def notifySuccessfull(){
+        emailext (
+        attachLog: true,
+        attachmentsPattern: 'logs.txt',
+        subject: "SUCCESSFUL: Job '${env.JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())} [${env.BUILD_NUMBER}]'",
+        body: """<p>Job '${env.JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())} [${env.BUILD_NUMBER}]' has finished with status <b> <span style="color: green">SUCCESS</span></b>.</p>
+        <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+      //  recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+      //  to: "${env.DEFAULT_RECIPIENTS}, amit@open-insights.com"
+       to: "pratyush@open-insights.com, anurag@open-insights.com"
+         )
+    }
+    
+        def notifyFailed(){
+        emailext (
+        attachLog: true, 
+        attachmentsPattern: 'logs.txt',
+        subject: "FAILED: Job '${env.JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())} [${env.BUILD_NUMBER}]'",
+        body: """<p>Job '${env.JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())} [${env.BUILD_NUMBER}]' has finished with status <b><span style="color: red">FAILURE</span></b>.</p>
+        <p>Check console output <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+      //  recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+       //  to: "${env.DEFAULT_RECIPIENTS}, amit@open-insights.com"
+         to: "pratyush@open-insights.com, anurag@open-insights.com"
+        )
+    }
