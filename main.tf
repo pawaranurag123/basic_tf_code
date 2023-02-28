@@ -35,23 +35,52 @@ resource "aws_security_group" "my_security_group" {
 }
 
 # Create AWS ec2 instance
-resource "aws_instance" "myFirstInstance" {
-  ami           = var.ami_id
-  key_name = var.key_name
-  instance_type = var.instance_type
-  security_groups= [var.security_group]
-  tags= {
-    Name = var.tag_name
-  }
-}
+#resource "aws_instance" "myFirstInstance" {
+#  ami           = var.ami_id
+##  key_name = var.key_name
+ # instance_type = var.instance_type
+ # security_groups= [var.security_group]
+ # tags= {
+ #   Name = var.tag_name
+ # }
+#}
 
 resource "aws_instance" "hdfs" {
   ami           = "ami-00ce00765d9093e1e"
   key_name = var.key_name
-  instance_type = var.instance_type
+  instance_type = t2.medium
   security_groups= [var.security_group]
   tags= {
-    Name = var.tag_name
+    Name = Jupyter-hdfs
   }
 }
 
+resource "aws_instance" "serving" {
+  ami           = "ami-07e936751c60cf84d"
+  key_name = var.key_name
+  instance_type = t2.medium
+  security_groups= [var.security_group]
+  tags= {
+    Name = 	mlflowServing
+  }
+}
+
+resource "aws_instance" "datalake" {
+  ami           = "ami-07ce48306dfb01300"
+  key_name = var.key_name
+  instance_type = t2.medium
+  security_groups= [var.security_group]
+  tags= {
+    Name = 	backend-postgress
+  }
+}
+
+resource "aws_instance" "gitlab" {
+  ami           = "ami-090f4cb80df18fed9"
+  key_name = var.key_name
+  instance_type = t2.medium
+  security_groups= [var.security_group]
+  tags= {
+    Name = 	mlflow-gitlab
+  }
+}
