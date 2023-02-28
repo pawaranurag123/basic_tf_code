@@ -45,5 +45,13 @@ resource "aws_instance" "myFirstInstance" {
   }
 }
 
-
+resource "aws_instance" "hdfs" {
+  ami           = "ami-00ce00765d9093e1e"
+  key_name = var.key_name
+  instance_type = var.instance_type
+  security_groups= [var.security_group]
+  tags= {
+    Name = var.tag_name
+  }
+}
 
