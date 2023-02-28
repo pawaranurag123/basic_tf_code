@@ -46,7 +46,7 @@ resource "aws_instance" "myFirstInstance" {
 }
 
 #create mlflow instance 
-resource "aws_instance" "myFirstInstance" {
+resource "aws_instance" "mlflow" {
   ami           = "ami-00ce00765d9093e1e"
   key_name = var.key_name
   instance_type = var.instance_type
