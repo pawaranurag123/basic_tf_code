@@ -51,7 +51,7 @@ resource "aws_instance" "hdfs" {
   instance_type = var.instance_type
   security_groups= [var.security_group]
   tags= {
-    Name = Jupyter-hdfs
+    Name = "Jupyter-hdfs"
   }
 }
 
