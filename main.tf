@@ -111,7 +111,7 @@ resource "aws_instance" "hdfs" {
   instance_type = var.instance_type
   security_groups= [var.security_group]
   tags= {
-    Name = "Jupyter-hdfs"
+    Name = "Jupyter-hdfs_demo"
   }
 }
 
@@ -121,7 +121,7 @@ resource "aws_instance" "serving" {
   instance_type = var.instance_type
   security_groups= [var.security_group]
   tags= {
-    Name = 	"mlflowServing"
+    Name = 	"mlflowServing_demo"
   }
 }
 
@@ -131,7 +131,7 @@ resource "aws_instance" "datalake" {
   instance_type = var.instance_type
   security_groups= [var.security_group]
   tags= {
-    Name = 	"backend-postgress"
+    Name = 	"backend-postgress_demo"
   }
 }
 
@@ -141,6 +141,6 @@ resource "aws_instance" "gitlab" {
   instance_type = var.instance_type
   security_groups= [var.security_group]
   tags= {
-    Name = 	"mlflow-gitlab"
+    Name = 	"mlflow-gitlab_demo"
   }
 }
